@@ -23,13 +23,22 @@ class SimpleBackupManager
 	}
 
 	public function export_database($database, $user, $password, $host, $target){
-		exec("mysqldump --user={$user} --password={$password} --host={$host} {$database} > {$target}");
+		try{
+			exec("mysqldump --user={$user} --password={$password} --host={$host} {$database} > {$target}");
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
+		
 	}
 
 	public function import_database($database, $user, $password, $host, $file){
-		exec("mysql --user={$user} --password={$password} --host={$host} -e \"create database {$database}\"");
-		sleep(1);
-		exec("mysql --user={$user} --password={$password} --host={$host} {$database} < {$file}");
+		try{
+			exec("mysql --user={$user} --password={$password} --host={$host} -e \"create database {$database}\"");
+			sleep(1);
+			exec("mysql --user={$user} --password={$password} --host={$host} {$database} < {$file}");
+		}catch(Exception $e){
+			echo $e->getMessage();
+		}
 	}
 
 }
